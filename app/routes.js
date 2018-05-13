@@ -23,7 +23,7 @@ module.exports = function(app) {
     });
 
     app.get('/whoami', (req, res) => {
-        const result = users.get(req.body.user_id);
+        const result = users.get(req.query.user_id);
 
         if (result) {
             users.touch(result.id);
@@ -35,7 +35,7 @@ module.exports = function(app) {
         } else {
             res.status(400).send({
                 status: 'error',
-                message: 'Пользователь существует'
+                message: 'Пользователь не существует'
             });
         }
     });
@@ -58,7 +58,7 @@ module.exports = function(app) {
         } else {
             res.status(400).send({
                 status: 'error',
-                message: 'Пользователь существует'
+                message: 'Пользователь не существует'
             });
         }
     });
