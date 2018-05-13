@@ -161,8 +161,8 @@ module.exports = function(app) {
     });
 
     app.get('/status', (req, res) => {
-        const user = users.get(req.body.user_id);
-        const combat = combats.get(req.body.combat_id);
+        const user = users.get(req.query.user_id);
+        const combat = combats.get(req.query.combat_id);
 
         if (!user) {
             res.status(400).send({

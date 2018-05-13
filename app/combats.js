@@ -107,26 +107,27 @@ module.exports = {
             {
                 origin: turn[0].user,
                 target: turn[1].user,
-                hit: turn[0].hit,
-                blocked: turn[1].blocks.includes(turn[0].hit)
+                hit: turn[0].turn.hit,
+                blocked: turn[1].turn.blocks.includes(turn[0].turn.hit)
             },
             {
                 origin: turn[1].user,
                 target: turn[0].user,
-                hit: turn[1].hit,
-                blocked: turn[0].blocks.includes(turn[1].hit)
+                hit: turn[1].turn.hit,
+                blocked: turn[0].turn.blocks.includes(turn[1].turn.hit)
             }
         ];
 
+        const _this = this;
         kicks.forEach(function(kick) {
             if (!kick.blocked) {
-                this._damage(combat, kick.target);
+                _this._damage(combat, kick.target);
             }
         });
 
         combat.results.push(kicks);
         if (combat.players.every(function(player) {
-            player.health > 0;
+            return player.health > 0;
         })) {
             combat.turns.push([]);
         } else {
@@ -142,7 +143,7 @@ module.exports = {
             return player.id === user.id;
         });
 
-        target.health -= (Math.random() * 5) + 1;
+        target.health -= Math.round((Math.random() * 5) + 1);
     },
 
     combatDataForUser(combat, user) {
