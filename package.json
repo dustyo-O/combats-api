@@ -1,0 +1,20 @@
+{
+  "name": "combats-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "random-hash": "^4.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  }
+}
