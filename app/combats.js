@@ -163,6 +163,6 @@ module.exports = {
     write: function() {
         this.init();
 
-        fs.writeFileSync('./json/users.json', JSON.stringify(this._users, null, 4));
+        fs.writeFileSync('./json/combats.json', JSON.stringify(this._combats, null, 4));
     }
 };
