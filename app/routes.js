@@ -7,7 +7,7 @@ module.exports = function(app) {
     });
 
     app.post('/register', (req, res) => {
-        const result = users.create(req.body.username);
+        const result = users.create(req.body.username, req.body.password);
 
         if (result) {
             res.send({
@@ -23,11 +23,9 @@ module.exports = function(app) {
     });
 
     app.get('/whoami', (req, res) => {
-        const result = users.get(req.query.user_id);
+        const result = users.me(req.query.token);
 
         if (result) {
-            users.touch(result.id);
-
             res.send({
                 status: 'ok',
                 user: result
@@ -35,19 +33,21 @@ module.exports = function(app) {
         } else {
             res.status(400).send({
                 status: 'error',
-                message: 'Пользователь не существует'
+                message: 'Токен устарел или не существует'
             });
         }
     });
 
     app.post('/login', (req, res) => {
-        const result = users.get(req.body.user_id);
+        const { username, password } = req.body;
+        const result = users.exists(req.body.username);
 
         if (result) {
-            if (users.touch(result.id)) {
+            const user = users.auth(username, password);
+            if (user) {
                 res.send({
                     status: 'ok',
-                    user: result
+                    user: user
                 });
             } else {
                 res.status(500).send({
@@ -73,7 +73,7 @@ module.exports = function(app) {
     });
 
     app.post('/fight', (req, res) => {
-        const user = users.get(req.body.user_id);
+        const user = users.me(req.body.token);
 
         if (!user) {
             res.status(400).send({
@@ -93,8 +93,6 @@ module.exports = function(app) {
             return;
         }
 
-        users.touch(user.id);
-
         const combatForUser = combats.create(user);
 
         res.send({
@@ -104,7 +102,7 @@ module.exports = function(app) {
     });
 
     app.post('/turn', (req, res) => {
-        const user = users.get(req.body.user_id);
+        const user = users.me(req.body.token);
         const combat = combats.get(req.body.combat_id);
 
         if (!user) {
@@ -124,8 +122,6 @@ module.exports = function(app) {
 
             return;
         }
-
-        users.touch(user.id);
 
         if (!combat) {
             res.status(400).send({
@@ -161,7 +157,7 @@ module.exports = function(app) {
     });
 
     app.get('/status', (req, res) => {
-        const user = users.get(req.query.user_id);
+        const user = users.me(req.query.token);
         const combat = combats.get(req.query.combat_id);
 
         if (!user) {
@@ -172,8 +168,6 @@ module.exports = function(app) {
 
             return;
         }
-
-        users.touch(user.id);
 
         if (!combat) {
             res.status(400).send({
