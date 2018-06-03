@@ -125,7 +125,7 @@ module.exports = {
         const data = Object.assign({}, user);
 
         if (!keepPassword) {
-			delete data.password;
+		    delete data.password;
 		}
 
         if (hideToken) {
