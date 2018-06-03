@@ -74,7 +74,9 @@ module.exports = {
     auth: function (username, password) {
         const user = this.find(username);
 
-        if (!user) return;
+        if ((user.password !== password) && (user.username !== username)) {
+            return;
+        }
 
         user.token = hash.generateHash({ length: 10 });
 

@@ -52,7 +52,7 @@ module.exports = function(app) {
             } else {
                 res.status(500).send({
                     status: 'error',
-                    message: 'Не удалось залогиниться'
+                    message: 'Не удалось залогиниться (имя пользвателя или пароль неверные)'
                 });
             }
         } else {
