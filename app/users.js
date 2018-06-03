@@ -126,7 +126,7 @@ module.exports = {
 
         if (!keepPassword) {
             delete data.password;
-		}
+        }
 
         if (hideToken) {
             delete data.token;
