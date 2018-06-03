@@ -1,5 +1,6 @@
 const users = require('./users');
 const combats = require('./combats');
+const chat = require('./chat');
 
 module.exports = function(app) {
     app.get('/ping', (req, res) => {
@@ -208,6 +209,58 @@ module.exports = function(app) {
         res.send({
             status: 'ok',
             combat: combats.combatDataForUser(combat, user)
+        });
+    });
+
+    app.post('/chat', (req, res) => {
+        const user = users.me(req.body.token, true);
+
+        if (!user) {
+            res.status(403).send({
+                status: 'error',
+                message: 'Обязательны данные пользователя'
+            });
+        }
+
+        const { message, timestamp } = req.body;
+
+        if (!message) {
+            res.status(400).send({
+                status: 'error',
+                message: 'Сообщение не передано'
+            });
+
+            return;
+        }
+
+        if (chat.post(message, user)) {
+            res.send({
+                status: 'ok',
+                chat: chat.get(timestamp)
+            });
+        } else {
+            res.status(500).send({
+                status: 'error',
+                message: 'Сообщение не добавлено'
+            });
+        }
+    });
+
+    app.get('/chat', (req, res) => {
+        const user = users.me(req.query.token);
+
+        if (!user) {
+            res.status(403).send({
+                status: 'error',
+                message: 'Обязательны данные пользователя'
+            });
+        }
+
+        const timestamp = req.query.timestamp;
+
+        res.send({
+            status: 'ok',
+            chat: chat.get(timestamp)
         });
     });
 };

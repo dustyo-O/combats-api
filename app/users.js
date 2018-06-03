@@ -28,7 +28,7 @@ module.exports = {
         }
     },
 
-    me: function(token) {
+    me: function(token, hideToken = false) {
         this.init();
 
         if (!token) return;
@@ -38,7 +38,7 @@ module.exports = {
         if (me && this.isOnline(me)) {
             this.touch(me.id);
 
-            return this.userData(me);
+            return this.userData(me, hideToken);
         }
     },
 
