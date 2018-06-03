@@ -38,6 +38,33 @@ module.exports = function(app) {
         }
     });
 
+    app.get('/info', (req, res) => {
+        const observer = users.me(req.query.token);
+
+        if (observer) {
+            const user = users.get(req.query.user_id);
+
+            if (user) {
+                res.send({
+                    status: 'ok',
+                    user: user,
+                    combats: combats.listByUser(user, observer)
+                });
+            } else {
+                res.status(400).send({
+                    status: 'error',
+                    message: 'Пользователь не найден'
+                });
+            }
+
+        } else {
+            res.status(400).send({
+                status: 'error',
+                message: 'Токен устарел или не существует'
+            });
+        }
+    });
+
     app.post('/login', (req, res) => {
         const { username, password } = req.body;
         const result = users.exists(req.body.username);

@@ -40,6 +40,23 @@ module.exports = {
         });
     },
 
+    /**
+     * Список боев пользоветеля user, запрашиваемых пользователем observer
+     * @param {User} user
+     * @param {User} observer
+     *
+     * @returns {CombatData[]} массив информации о боях пользователя user
+     */
+    listByUser: function(user, observer) {
+        this.init();
+
+        return this._combats.filter(function(item) {
+            return item.players.some(function (player) {
+                return player.id === user.id;
+            });
+        }).map(combat => this.combatDataForUser(combat, observer));
+    },
+
     create: function(user) {
         if (this.findByUser(user)) return;
 
@@ -147,15 +164,17 @@ module.exports = {
     },
 
     combatDataForUser(combat, user) {
+        const you = combat.players.find(function (player) {
+            return player.id === user.id;
+        });
+
         return {
             id: combat.id,
             status: combat.status,
-            turn_status: this.turnAllowed(combat, user),
+            turn_status: you && this.turnAllowed(combat, user),
             results: combat.results,
-            you: combat.players.find(function (player) {
-                return player.id === user.id;
-            }),
-            enemy: combat.players.find(function(player) {
+            you: you,
+            enemy: you && combat.players.find(function(player) {
                 return player.id !== user.id;
             })
         };
