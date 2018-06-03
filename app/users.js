@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const hash = require('random-hash');
 
 module.exports = {
@@ -42,10 +42,10 @@ module.exports = {
         }
     },
 
-    find: function(username) {
+    find: function(username, keepPassword) {
         this.init();
 
-        return this.userData(this._users.find(function(item) { return item.username === username }));
+        return this.userData(this._users.find(function(item) { return item.username === username }), true, keepPassword);
     },
 
     exists: function(username) {
@@ -72,9 +72,9 @@ module.exports = {
     },
 
     auth: function (username, password) {
-        const user = this.find(username);
+        const user = this.find(username, true);
 
-        if ((user.password !== password) && (user.username !== username)) {
+        if ((user.password !== password) || (user.username !== username)) {
             return;
         }
 
@@ -119,12 +119,14 @@ module.exports = {
         return user.last_active && (now - user.last_active) < (600 * 1000);
     },
 
-    userData(user, hideToken = false) {
+    userData(user, hideToken = false, keepPassword) {
         if (!user) return;
 
         const data = Object.assign({}, user);
 
-        delete data.password;
+        if (!keepPassword) {
+            delete data.password;
+        }
 
         if (hideToken) {
             delete data.token;
