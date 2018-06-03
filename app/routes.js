@@ -15,7 +15,7 @@ module.exports = function(app) {
                 user: result
             });
         } else {
-            res.status(400).send({
+            res.status(409).send({
                 status: 'error',
                 message: 'Пользователь существует'
             });
@@ -31,7 +31,7 @@ module.exports = function(app) {
                 user: result
             });
         } else {
-            res.status(400).send({
+            res.status(403).send({
                 status: 'error',
                 message: 'Токен устарел или не существует'
             });
@@ -50,7 +50,7 @@ module.exports = function(app) {
                     user: user
                 });
             } else {
-                res.status(500).send({
+                res.status(403).send({
                     status: 'error',
                     message: 'Не удалось залогиниться (имя пользвателя или пароль неверные)'
                 });
@@ -76,7 +76,7 @@ module.exports = function(app) {
         const user = users.me(req.body.token);
 
         if (!user) {
-            res.status(400).send({
+            res.status(403).send({
                 status: 'error',
                 message: 'Обязательны данные пользователя'
             });
@@ -106,7 +106,7 @@ module.exports = function(app) {
         const combat = combats.get(req.body.combat_id);
 
         if (!user) {
-            res.status(400).send({
+            res.status(403).send({
                 status: 'error',
                 message: 'Обязательны данные пользователя'
             });
@@ -161,7 +161,7 @@ module.exports = function(app) {
         const combat = combats.get(req.query.combat_id);
 
         if (!user) {
-            res.status(400).send({
+            res.status(403).send({
                 status: 'error',
                 message: 'Обязательны данные пользователя'
             });
