@@ -125,13 +125,13 @@ module.exports = {
                 origin: turn[0].user,
                 target: turn[1].user,
                 hit: turn[0].turn.hit,
-                blocked: turn[1].turn.blocks.includes(turn[0].turn.hit)
+                blocked: turn[1].turn.blocks.includes(String(turn[0].turn.hit))
             },
             {
                 origin: turn[1].user,
                 target: turn[0].user,
                 hit: turn[1].turn.hit,
-                blocked: turn[0].turn.blocks.includes(turn[1].turn.hit)
+                blocked: turn[0].turn.blocks.includes(String(turn[1].turn.hit))
             }
         ];
 
