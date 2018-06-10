@@ -61,7 +61,8 @@ module.exports = {
             id: hash.generateHash(),
             token: hash.generateHash({ length: 10 }),
             username: username,
-            password: password
+            password: password,
+            last_active: + new Date()
         };
 
         this._users.push(user);
